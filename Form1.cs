@@ -805,7 +805,6 @@ namespace nesmapperprogram
                 (64 x 16kb pages) = 40
             */
 
-            // prgSizeString = twelveHexValueString + thirteenHexValueString;
             prgSizeString = upperNibbleByteFourString + lowerNibbleByteFourString;
 
             switch (prgSizeString)
@@ -1115,7 +1114,6 @@ namespace nesmapperprogram
                 (64 x 8kb pages) = 40
              */
             
-            //chrSizeString = fifteenHexValueString + sixteenHexValueString;
             chrSizeString = upperNibbleByteFiveString + lowerNibbleByteFiveString;
 
             switch (chrSizeString)
@@ -1865,7 +1863,7 @@ namespace nesmapperprogram
                 case 148:
                 case 149:
                 case 150:
-                    mapperTextBox.Text = mapperInt + " - [Sachen]";
+                    mapperTextBox.Text = mapperInt + " - Sachen";
                     break;
                 case 151:
                     mapperTextBox.Text = "151 - Vs. Unisystem";
@@ -2527,22 +2525,14 @@ namespace nesmapperprogram
 
 
                 //byte 4
-                //twelveHexValueString = hc[12].ToString();
-                //thirteenHexValueString = hc[13].ToString();
-                //prgSizeString = twelveHexValueString + thirteenHexValueString;
                 string lowerNibbleByte4BinaryString = hexStringToBinary(lowerNibbleByteFourString);
                 string upperNibbleByte4BinaryString = hexStringToBinary(upperNibbleByteFourString);
 
                 //byte 5
-                //fifteenHexValueString = hc[15].ToString();
-                //sixteenHexValueString = hc[16].ToString();
-                //chrSizeString = fifteenHexValueString + sixteenHexValueString;
                 string lowerNibbleByte5BinaryString = hexStringToBinary(lowerNibbleByteFiveString);
                 string upperNibbleByte5BinaryString = hexStringToBinary(upperNibbleByteFiveString);
 
                 // byte 9
-                //twentySevenHexValueString = hc[27].ToString();
-                //twentyEightHexValueString = hc[28].ToString();
                 string lowerNibbleByte9BinaryString = hexStringToBinary(lowerNibbleByteNineString);
                 string upperNibbleByte9BinaryString = hexStringToBinary(upperNibbleByteNineString);
 
