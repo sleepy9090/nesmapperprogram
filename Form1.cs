@@ -10,10 +10,8 @@ using System.IO;
 using System.Globalization;
 using System.Collections.Generic;
 
-// NES MAPPER 2.0
-// Programmed by Shawn M. Crawford 1/29/2017
-
-// References used for this program:
+// NES ROM UTILITY 2.0
+// Programmed by: Shawn M. Crawford
 
 namespace nesmapperprogram
 {
@@ -23,6 +21,8 @@ namespace nesmapperprogram
         {
             InitializeComponent();
         }
+
+        #region global variables
         string openFlagString;
         string filename;
         string path;
@@ -45,10 +45,14 @@ namespace nesmapperprogram
             { 'e', "1110" },
             { 'f', "1111" }
         };
+        #endregion
 
+        #region delegates
         private delegate void puttext(object sender, string p);
         private delegate void putvalue(object sender, int value);
+        #endregion
 
+        #region private methods
         private void put(object sender, string p)
         {
             if (sender == (object)statusLabel)
@@ -123,35 +127,33 @@ namespace nesmapperprogram
 
         private void loadfile()
         {
-            using (StreamReader sr = new StreamReader(path, Encoding.Default))
+            using (StreamReader streamReader = new StreamReader(path, Encoding.Default))
             {
-                char[] buff1;
+                char[] buffer1;
                 string asciiString;
 
                 int counterOneInt, counterTwoInt;
                 //start first loop
-                while (!sr.EndOfStream)
+                while (!streamReader.EndOfStream)
                 {
-                    buff1 = new char[1024 * 1024 + 1];
-                    int size2 = sr.ReadBlock(buff1, 0, 1024 * 1024);
+                    buffer1 = new char[1024 * 1024 + 1];
+                    int size2 = streamReader.ReadBlock(buffer1, 0, 1024 * 1024);
 
-                    MemoryStream ms = new MemoryStream(size2 + 1);
-                    MemoryStream ns = new MemoryStream(size2 + 1);
+                    MemoryStream memoryStream = new MemoryStream(size2 + 1);
+                    MemoryStream memoryStream2 = new MemoryStream(size2 + 1);
 
-                    StreamWriter sw1 = new StreamWriter(ms);
-                    StreamWriter sw2 = new StreamWriter(ns);
+                    StreamWriter streanWriter = new StreamWriter(memoryStream);
+                    StreamWriter streamWriter2 = new StreamWriter(memoryStream2);
                     counterTwoInt = 0;
 
                     //start second loop
                     while (counterTwoInt < 16)
                     {
-
-                        char[] buff;
                         int size = 1;
 
-                        buff = new char[] 
+                        char[] buffer2 = new char[] 
                         { 
-                            buff1[counterTwoInt] 
+                            buffer1[counterTwoInt] 
                         };
 
                         counterOneInt = 0;
@@ -159,14 +161,14 @@ namespace nesmapperprogram
                         while (counterOneInt < size)
                         {
                             //g = ascii key char value?
-                            byte g = Encoding.Default.GetBytes(buff, counterOneInt, 1)[0];
+                            byte g = Encoding.Default.GetBytes(buffer2, counterOneInt, 1)[0];
                             //n = hex value of the ascii chars
                             string n = g.ToString("x").ToUpper();
 
                             //if n = 0 then n will = 00
                             if (n.Length == 1) n = "0" + n;
                             //write the hex line
-                            sw1.Write(n);
+                            streanWriter.Write(n);
 
                             //if ascii value of g is between 33 and 122 then n = 00
                             if (!(g >= 33 && g <= 122)) n = "00";
@@ -174,38 +176,38 @@ namespace nesmapperprogram
                             //if n = 00 then ascii line is .
                             if (n == "00")
                             {
-                                sw2.Write(".");
+                                streamWriter2.Write(".");
                             }
                             else
                             //else ascii line = ascii value of the hex string
                             {
                                 asciiString = Encoding.Default.GetString(new byte[] { g });
-                                sw2.Write(asciiString);
+                                streamWriter2.Write(asciiString);
                             }
 
                             counterOneInt++;
                         }
                         //end third loop
                         counterTwoInt++;
-                        sw1.Write(" ");
+                        streanWriter.Write(" ");
 
                     }
                     //end second loop
-                    sw1.Flush();
-                    sw2.Flush();
-                    ms.Flush();
-                    ns.Flush();
+                    streanWriter.Flush();
+                    streamWriter2.Flush();
+                    memoryStream.Flush();
+                    memoryStream2.Flush();
 
-                    ms.Seek(0, SeekOrigin.Begin);
-                    ns.Seek(0, SeekOrigin.Begin);
+                    memoryStream.Seek(0, SeekOrigin.Begin);
+                    memoryStream2.Seek(0, SeekOrigin.Begin);
 
-                    StreamReader h = new StreamReader(ms, Encoding.Default);
-                    hexTextBox.Invoke(new puttext(put), new object[] { hexTextBox, h.ReadToEnd() });
-                    h.Close();
+                    StreamReader streamReader2 = new StreamReader(memoryStream, Encoding.Default);
+                    hexTextBox.Invoke(new puttext(put), new object[] { hexTextBox, streamReader2.ReadToEnd() });
+                    streamReader2.Close();
 
-                    h = new StreamReader(ns, Encoding.Default);
-                    asciiTextBox.Invoke(new puttext(put), new object[] { asciiTextBox, h.ReadToEnd() });
-                    h.Close();
+                    streamReader2 = new StreamReader(memoryStream2, Encoding.Default);
+                    asciiTextBox.Invoke(new puttext(put), new object[] { asciiTextBox, streamReader2.ReadToEnd() });
+                    streamReader2.Close();
                 }
             }
         }
@@ -229,25 +231,25 @@ namespace nesmapperprogram
 
                 #region Remove 16 byte header
                 //read the nes rom in binary mode
-                FileStream fs = new FileStream(filePath, FileMode.Open, FileAccess.Read);
-                BinaryReader br = new BinaryReader(fs, Encoding.Default);
+                FileStream fileStream16 = new FileStream(filePath, FileMode.Open, FileAccess.Read);
+                BinaryReader binaryReader16 = new BinaryReader(fileStream16, Encoding.Default);
 
                 // Read the ROM into nesData
-                byte[] nesData  = new byte[br.BaseStream.Length];
-                nesData = br.ReadBytes((int)br.BaseStream.Length);
+                byte[] nesData = new byte[binaryReader16.BaseStream.Length];
+                nesData = binaryReader16.ReadBytes((int)binaryReader16.BaseStream.Length);
                 
                 //output the file at the same location and append .bin to it
                 FileStream outStream = File.Create(@path + ".bin");
-                BinaryWriter bw = new BinaryWriter(outStream);
+                BinaryWriter binaryWriter16 = new BinaryWriter(outStream);
 
                 try
                 {
                     // we need to set x to 16 to remove the header then add fs.length - 16
                     // write the data from nesData (the ROM) to the outstream (the BIN) minus the header
                     x = 16;
-                    while ((bw.BaseStream.Position) < (fs.Length - 16))
+                    while ((binaryWriter16.BaseStream.Position) < (fileStream16.Length - 16))
                     {
-                        bw.Write(nesData[x]);
+                        binaryWriter16.Write(nesData[x]);
                         x = x + 1;
                     }
                 } 
@@ -259,15 +261,15 @@ namespace nesmapperprogram
                 finally
                 {
                     outStream.Close();
-                    fs.Close();
-                    br.Close();
-                    bw.Close();
+                    fileStream16.Close();
+                    binaryReader16.Close();
+                    binaryWriter16.Close();
                 }
 
                 outStream.Close();
-                fs.Close();
-                br.Close();
-                bw.Close();
+                fileStream16.Close();
+                binaryReader16.Close();
+                binaryWriter16.Close();
                 #endregion
 
                 if (outputCHRPRGCheckBox.Checked && errorHandler == 0)
@@ -288,22 +290,22 @@ namespace nesmapperprogram
                             //Split the rom into PRG & CHR
 
                             //read the nes rom in binary mode
-                            FileStream fs2 = new FileStream(updatedFilePath, FileMode.Open, FileAccess.Read);
-                            BinaryReader br2 = new BinaryReader(fs2, Encoding.Default);
+                            FileStream fileStream = new FileStream(updatedFilePath, FileMode.Open, FileAccess.Read);
+                            BinaryReader binaryReader = new BinaryReader(fileStream, Encoding.Default);
 
-                            byte[] nesPrgData = new byte[br2.BaseStream.Length];
-                            nesPrgData = br2.ReadBytes((int)br2.BaseStream.Length);
+                            byte[] nesPrgData = new byte[binaryReader.BaseStream.Length];
+                            nesPrgData = binaryReader.ReadBytes((int)binaryReader.BaseStream.Length);
 
                             //chop out the prg, we are not using the ROM anymore, we are using the BIN we created from the ROM
                             //output the file at the same location and append .prg.bin to it
                             FileStream prgOutStream = File.Create(@path + ".prg.bin");
-                            BinaryWriter bw2 = new BinaryWriter(prgOutStream);
+                            BinaryWriter binaryWriter = new BinaryWriter(prgOutStream);
 
                             try
                             {
-                                while ((bw2.BaseStream.Position) != prgSize)
+                                while ((binaryWriter.BaseStream.Position) != prgSize)
                                 {
-                                    bw2.Write(nesPrgData[xx]);
+                                    binaryWriter.Write(nesPrgData[xx]);
                                     xx++;
                                 }
                                 wasPRGRipped = true;
@@ -315,14 +317,14 @@ namespace nesmapperprogram
                             }
                             finally
                             {
-                                fs2.Close();
-                                br2.Close();
-                                bw2.Close();
+                                fileStream.Close();
+                                binaryReader.Close();
+                                binaryWriter.Close();
                             }
 
-                            fs2.Close();
-                            br2.Close();
-                            bw2.Close();
+                            fileStream.Close();
+                            binaryReader.Close();
+                            binaryWriter.Close();
                         }
                         #endregion
 
@@ -330,20 +332,20 @@ namespace nesmapperprogram
                         if (Convert.ToInt32(chrSizeSplitTextBox.Text) != 0)
                         {
                             //chop out the chr, we are not using the ROM anymore, we are using the BIN we created from the ROM
-                            FileStream fs3 = new FileStream(updatedFilePath, FileMode.Open, FileAccess.Read);
-                            BinaryReader br3 = new BinaryReader(fs3, Encoding.Default);
+                            FileStream fileStream = new FileStream(updatedFilePath, FileMode.Open, FileAccess.Read);
+                            BinaryReader binaryReader = new BinaryReader(fileStream, Encoding.Default);
 
-                            byte[] nesChrData = new byte[br3.BaseStream.Length];
-                            nesChrData = br3.ReadBytes((int)br3.BaseStream.Length);
+                            byte[] nesChrData = new byte[binaryReader.BaseStream.Length];
+                            nesChrData = binaryReader.ReadBytes((int)binaryReader.BaseStream.Length);
                             FileStream chrOutStream = File.Create(@path + ".chr.bin");
-                            BinaryWriter bw3 = new BinaryWriter(chrOutStream);
+                            BinaryWriter binaryWriter = new BinaryWriter(chrOutStream);
 
                             try
                             {
                                 int counter = chrSize;
                                 while (0 < counter)
                                 {
-                                    bw3.Write(nesChrData[xx]);
+                                    binaryWriter.Write(nesChrData[xx]);
                                     xx++; // data position
                                     counter--;
                                 }
@@ -356,14 +358,14 @@ namespace nesmapperprogram
                             }
                             finally
                             {
-                                fs3.Close();
-                                br3.Close();
-                                bw3.Close();
+                                fileStream.Close();
+                                binaryReader.Close();
+                                binaryWriter.Close();
                             }
 
-                            fs3.Close();
-                            br3.Close();
-                            bw3.Close();
+                            fileStream.Close();
+                            binaryReader.Close();
+                            binaryWriter.Close();
                         }
                         #endregion
 
@@ -3051,7 +3053,6 @@ namespace nesmapperprogram
             #endregion
         }
 
-        #region private methods
         public string hexStringToBinary(string hex)
         {
             StringBuilder result = new StringBuilder();
