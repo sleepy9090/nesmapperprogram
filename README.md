@@ -49,14 +49,12 @@ Requires .Net 3.5 Framework
 
  ----
 1.0  December 22nd, 2008
--initial release
+* initial release
+
  ----
-
-
-
 Thanks:
-Ben Foster - testing Vs. Unisystem features
-http://nesdev.com/ - NESDEV Wiki and NESDEV BBS for docs and information
-http://romhacking.net/ - hosting
+* Ben Foster - testing Vs. Unisystem features
+* http://nesdev.com/ - NESDEV Wiki and NESDEV BBS for docs and information
+* http://romhacking.net/ - hosting
 
 
