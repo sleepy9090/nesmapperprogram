@@ -1,0 +1,9 @@
+F:\Users\sleepy\Documents\visual studio 2013\Projects\nesmapperprogram\nesmapperprogram\bin\Release\nesmapperprogram.exe
+F:\Users\sleepy\Documents\visual studio 2013\Projects\nesmapperprogram\nesmapperprogram\bin\Release\nesmapperprogram.pdb
+F:\Users\sleepy\Documents\visual studio 2013\Projects\nesmapperprogram\nesmapperprogram\obj\Release\nesmapperprogram.AboutBox1.resources
+F:\Users\sleepy\Documents\visual studio 2013\Projects\nesmapperprogram\nesmapperprogram\obj\Release\nesmapperprogram.mainForm.resources
+F:\Users\sleepy\Documents\visual studio 2013\Projects\nesmapperprogram\nesmapperprogram\obj\Release\nesmapperprogram.Properties.Resources.resources
+F:\Users\sleepy\Documents\visual studio 2013\Projects\nesmapperprogram\nesmapperprogram\obj\Release\nesmapperprogram.csproj.GenerateResource.Cache
+F:\Users\sleepy\Documents\visual studio 2013\Projects\nesmapperprogram\nesmapperprogram\obj\Release\nesmapperprogram.exe
+F:\Users\sleepy\Documents\visual studio 2013\Projects\nesmapperprogram\nesmapperprogram\obj\Release\nesmapperprogram.pdb
+F:\Users\sleepy\Documents\visual studio 2013\Projects\nesmapperprogram\nesmapperprogram\obj\Release\nesmapperprogram.csprojResolveAssemblyReference.cache
